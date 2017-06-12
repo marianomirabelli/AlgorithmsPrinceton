@@ -52,11 +52,20 @@ public class PercolationStats {
     }
 
     public static void main(String [] args){
-        int n = Integer.parseInt(args[0]);
-        int t = Integer.parseInt(args[1]);
-        PercolationStats stats = new PercolationStats(n,t);
-        System.out.println("mean= " + stats.mean());
-        System.out.println("stddev= " + stats.stddev());
-        System.out.println("95% confidence interval " + "[ " + stats.confidenceHi() + "," +stats.confidenceLo()+"]");
+        if(args.length<2){
+            throw new IllegalArgumentException("PercolationStats is waiting for two arguments, N and T");
+        }
+       try
+       {
+           int n = Integer.parseInt(args[0]);
+           int t = Integer.parseInt(args[1]);
+           PercolationStats stats = new PercolationStats(n,t);
+           System.out.println("mean= " + stats.mean());
+           System.out.println("stddev= " + stats.stddev());
+           System.out.println("95% confidence interval " + "[ " + stats.confidenceHi() + "," +stats.confidenceLo()+"]");
+       } catch (NumberFormatException ex){
+           System.out.println("The parameters must be Integers");
+       }
+
     }
 }
