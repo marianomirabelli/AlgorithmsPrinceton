@@ -1,34 +1,33 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 
 /**
  * Created by Mariano on 18/6/17.
  */
 public class Deque<Item> implements Iterable<Item>{
 
-    private Node<Item> first;
-    private Node<Item> last;
-    private Iterator<Item> iterator;
-    private int size;
+    protected Node<Item> first;
+    protected Node<Item> last;
+    protected int size;
 
     private class Node<Item> {
         private Node<Item> next;
         private Node<Item> previous;
         private Item value;
 
-
         public Node(Item value){
-            this.next = next;
+            this.value = value;
         }
     }
 
     private class DequeIterator implements Iterator<Item>{
 
-        private Node<Item> current = getFirst();
+        private Node<Item> current = first;
 
         @Override
         public boolean hasNext() {
-            return current==null;
+            return current != null;
         }
 
         @Override
@@ -45,11 +44,12 @@ public class Deque<Item> implements Iterable<Item>{
         public void remove() {
             throw new java.lang.UnsupportedOperationException("The remove operation is not supported");
         }
+
+
     }
 
     public Deque(){
          this.size = 0;
-         this.iterator = new DequeIterator();
     }
 
     public boolean isEmpty(){
@@ -132,12 +132,35 @@ public class Deque<Item> implements Iterable<Item>{
         return value;
     }
 
-    protected Node<Item> getFirst(){
-        return this.first;
-    }
 
     public Iterator<Item> iterator(){
-        return this.iterator;
+        return new DequeIterator();
+    }
+
+    public  static void main(String args[]){
+        Deque<Integer> deque = new Deque<Integer>();
+        deque.addFirst(new Integer(1));
+        deque.addLast(new Integer(8));
+        deque.addFirst(new Integer(5));
+        deque.addLast(new Integer(25));
+        for(Integer val: deque){
+            System.out.println(val);
+        }
+        System.out.println("Size: " + deque.size());
+        System.out.println("<---------------------------->");
+        System.out.println(deque.removeFirst());
+        System.out.println("Size: " + deque.size());
+        System.out.println("<---------------------------->");
+        for(Integer val: deque){
+            System.out.println(val);
+        }
+        System.out.println("<---------------------------->");
+        System.out.println(deque.removeLast());
+        System.out.println("Size: " + deque.size());
+        System.out.println("<---------------------------->");
+        for(Integer val: deque){
+            System.out.println(val);
+        }
     }
 
 }
