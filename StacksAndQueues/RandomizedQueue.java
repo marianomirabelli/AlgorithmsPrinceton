@@ -10,7 +10,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
 
     protected int size;
-    protected int last;
     protected Item [] items;
 
 
@@ -54,7 +53,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     public boolean isEmpty(){
-        return this.size==0;
+        return this.size==-1;
     }
 
     public int size(){
@@ -65,52 +64,36 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if(item==null){
             throw new NullPointerException("You can't add null elements");
         }
-
-        if(this.isEmpty()){
-            this.last = 0;
-            this.items[this.last] = item;
-        }else{
-            this.last++;
-            this.items[this.last] = item;
-            if(this.size==this.items.length){
-                Item[] aux = this.items;
-                this.items = (Item[]) new Object[this.items.length*2];
-                for(int i=0;i<aux.length;i++){
-                    this.items[i] = aux[i];
-                }
-            }
-
+        this.items[this.size] = item;
+        this.size+=1;
+        if(this.size==this.items.length-1){
+          resize(this.items.length*2);
         }
-
-        this.size++;
-
     }
 
     public Item dequeue(){
         if(this.isEmpty()){
             throw new NoSuchElementException("You can't deque from empty queue");
         }
-        int randomIndex = StdRandom.uniform(this.size-1);
-        if(randomIndex==this.last){
-            this.last--;
+       int randomIndex = StdRandom.uniform(this.size);
+       Item item = this.items[randomIndex];
+       this.size-=1;
+       this.items[randomIndex] = this.items[size];
+       this.items[this.size]=null;
+        if(this.size<=this.items.length/4){
+            resize(this.items.length/2);
+
         }
-        Item item = this.items[randomIndex];
-        this.size--;
-        if(this.size==this.items.length/4){
-            Item[] aux = this.items;
-            this.items = (Item[]) new Object[this.items.length/2];
-            for(int i=0;i<aux.length;i++){
-                this.items[i] = aux[i];
-            }
-        }
-        return item;
+       return item;
+
+
     }
 
     public Item sample() {
         if(this.isEmpty()){
             throw new NoSuchElementException("You can't show items from empty queue");
         }
-        int randomIndex = StdRandom.uniform(this.size-1);
+        int randomIndex = StdRandom.uniform(this.size);
         Item item = this.items[randomIndex];
         return item;
 
@@ -119,14 +102,34 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Iterator<Item> iterator(){
         return new RandomizedQueueIterator();
     }
+
+    private void resize(int N){
+        Item[] aux = this.items;
+        this.items = (Item[]) new Object[N];
+        for(int i=0;i<=this.size;i++){
+            this.items[i] = aux[i];
+        }
+
+    }
+
+
     public static void main(String[] args){
         RandomizedQueue<Integer> randomQueue = new RandomizedQueue<>();
-        randomQueue.enqueue(1);
-        randomQueue.enqueue(2);
-        randomQueue.enqueue(3);
-        randomQueue.enqueue(4);
-        for(Integer value: randomQueue){
-            System.out.println(value);
+        int index = 0;
+        while(index<15){
+            randomQueue.enqueue(new Integer(index));
+            index++;
+        }
+
+        for(Integer value : randomQueue){
+            System.out.println(randomQueue.sample());
+        }
+
+        System.out.println("<---------------------------------->");
+       index = 0;
+        while(index<15){
+            System.out.println(randomQueue.dequeue());
+            index++;
         }
 
 
