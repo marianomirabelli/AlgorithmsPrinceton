@@ -46,7 +46,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
 
-
+    @SuppressWarnings("unchecked")
     public RandomizedQueue(){
         this.size = 0;
         this.items =(Item[]) new Object [10];
@@ -103,6 +103,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return new RandomizedQueueIterator();
     }
 
+    @SuppressWarnings("unchecked")
     private void resize(int N){
         Item[] aux = this.items;
         this.items = (Item[]) new Object[N];
