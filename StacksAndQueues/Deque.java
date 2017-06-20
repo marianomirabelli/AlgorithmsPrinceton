@@ -7,9 +7,9 @@ import java.util.function.Consumer;
  */
 public class Deque<Item> implements Iterable<Item>{
 
-    protected Node<Item> first;
-    protected Node<Item> last;
-    protected int size;
+     private Node<Item> first;
+     private Node<Item> last;
+     private int size;
 
     private class Node<Item> {
         private Node<Item> next;

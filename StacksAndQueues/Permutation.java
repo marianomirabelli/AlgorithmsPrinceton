@@ -12,9 +12,10 @@ public class Permutation {
         while(!StdIn.isEmpty()){
             queue.enqueue(StdIn.readString());
         }
-        for(int i=0; i<=k; i++){
-            StdOut.print("\n");
+        for(int i=0; i<k; i++){
             StdOut.print(queue.dequeue());
+            StdOut.print("\n");
+
         }
 
     }

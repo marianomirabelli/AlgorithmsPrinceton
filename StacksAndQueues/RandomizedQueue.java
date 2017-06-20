@@ -9,8 +9,8 @@ import java.util.NoSuchElementException;
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
 
-    protected int size;
-    protected Item [] items;
+     private int size;
+     private Item [] items;
 
 
     private class RandomizedQueueIterator implements Iterator<Item>{
@@ -20,8 +20,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         public RandomizedQueueIterator(){
             this.randomArray = items.clone();
-            StdRandom.shuffle(randomArray,0,size);
             this.index = 0;
+            if(size>0){
+                StdRandom.shuffle(randomArray,0,size);
+            }
+
         }
 
         @Override
@@ -49,11 +52,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     @SuppressWarnings("unchecked")
     public RandomizedQueue(){
         this.size = 0;
-        this.items =(Item[]) new Object [10];
+        this.items =(Item[]) new Object [1];
     }
 
     public boolean isEmpty(){
-        return this.size==-1;
+        return this.size==0;
     }
 
     public int size(){
@@ -66,7 +69,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
         this.items[this.size] = item;
         this.size+=1;
-        if(this.size==this.items.length-1){
+        if(this.size>=this.items.length-1){
           resize(this.items.length*2);
         }
     }
@@ -107,7 +110,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     private void resize(int N){
         Item[] aux = this.items;
         this.items = (Item[]) new Object[N];
-        for(int i=0;i<=this.size;i++){
+        for(int i=0;i<this.size;i++){
             this.items[i] = aux[i];
         }
 
