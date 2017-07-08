@@ -26,7 +26,7 @@ public class BruteCollinearPoints {
         }
 
         this.points = points;
-        this.segments = new LineSegment[points.length/4];
+        this.segments = new LineSegment[points.length];
         this.totalSegments = 0;
     }
 
@@ -35,10 +35,10 @@ public class BruteCollinearPoints {
     }
 
     public LineSegment[] segments(){
-       for(int i=0;i<points.length-1;i++){
-           for(int j=i+1; j<points.length-2;j++){
-               for(int k=j+1; k<points.length-3;k++){
-                   for(int h = k+1; h<points.length-4;k++){
+       for(int i=0;i<points.length-4;i++){
+           for(int j=i+1; j<points.length-3;j++){
+               for(int k=j+1; k<points.length-2;k++){
+                   for(int h = k+1; h<points.length-1;h++){
                        double aSegment = points[i].slopeTo(points[j]);
                        double bSegment = points[j].slopeTo(points[k]);
                        double cSegment = points[k].slopeTo(points[h]);
