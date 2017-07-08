@@ -11,6 +11,20 @@ public class BruteCollinearPoints {
         if(points == null){
             throw new IllegalArgumentException("The input array can't be null");
         }
+
+        for(int  i = 0; i < points.length; i++){
+            if(points[i] == null){
+                throw new IllegalArgumentException("Is not possible add null values");
+            }
+
+            for(int j = i+1; j< points.length; j++){
+                if(points[i].equals(points[j])){
+                    throw new IllegalArgumentException("Is not possible add duplicated points");
+                }
+            }
+
+        }
+
         this.points = points;
         this.segments = new LineSegment[points.length/4];
         this.totalSegments = 0;
@@ -25,20 +39,17 @@ public class BruteCollinearPoints {
            for(int j=i+1; j<points.length-2;j++){
                for(int k=j+1; k<points.length-3;k++){
                    for(int h = k+1; h<points.length-4;k++){
-                       if(points[i] == null || points[j] == null || points[k] == null || points[h] == null){
-                           throw new IllegalArgumentException("You can't have null's points");
-                       }
                        double aSegment = points[i].slopeTo(points[j]);
                        double bSegment = points[j].slopeTo(points[k]);
                        double cSegment = points[k].slopeTo(points[h]);
                        if((aSegment == bSegment) && ( bSegment == cSegment)){
                             segments[this.totalSegments] = new LineSegment(points[i],points[k]);
-
+                            this.totalSegments++;
                        }
-
                    }
                }
            }
-       }
+        }
+        return segments;
     }
 }
