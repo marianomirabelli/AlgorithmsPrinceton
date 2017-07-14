@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Created by Mariano on 8/7/17.
@@ -9,6 +9,7 @@ public class FastCollinearPoints {
     private Point [] points;
     private int totalSegments;
     private LineSegment[] segments;
+    private Stack<Point> headers;
 
 
     public FastCollinearPoints(Point[] points){
@@ -23,7 +24,7 @@ public class FastCollinearPoints {
             }
 
             for(int j = i+1; j< points.length; j++){
-                if(points[i].equals(points[j])){
+                if(points[i].compareTo(points[j]) == 0 ){
                     throw new IllegalArgumentException("Is not possible add duplicated points");
                 }
             }
@@ -33,33 +34,46 @@ public class FastCollinearPoints {
         this.totalSegments = 0;
         this.points = points;
         this.segments = new LineSegment [this.points.length/4];
-
+        this.headers = new Stack<Point>();
     }
 
     public int numberOfSegments() {
-
         return totalSegments;
-
     }
 
     public LineSegment[] segments() {
-
-        Point [] slopes;
-        for(int i=0; i< this.points.length ; i++){
-            slopes = new Point [this.points.length];
-            Arrays.sort(slopes,points[i].slopeOrder());
-            for(int j = 0; j < slopes.length-1; j++){
-                if(slopes[j].slopeTo(points[i]) != slopes[j+1].slopeTo(points[i])){
-                    this.segments[this.totalSegments] = new LineSegment(points[i],points[j]);
-                    this.totalSegments++;
-                    break;
-                }
+        Point [] copyPoints = Arrays.copyOf(points,points.length);
+        LinkedList<Point> collinearPoints;
+        for(Point p : points){
+            Arrays.sort(copyPoints,p.slopeOrder());
+            collinearPoints = new LinkedList<Point>();
+            double previousSlope = copyPoints[1].slopeTo(p);
+            collinearPoints.add(copyPoints[1]);
+            for(int i = 2; i < copyPoints.length-1;i++){
+               Point q = copyPoints[i];
+               double currentSlope = q.slopeTo(p);
+                if(previousSlope  != currentSlope){
+                    if(collinearPoints.size()>=3){
+                          collinearPoints.add(p);
+                          Collections.sort(collinearPoints);
+                          if(headers.isEmpty() || headers.pop().compareTo(collinearPoints.getFirst())!=0) {
+                              this.segments[this.totalSegments] = new LineSegment(collinearPoints.getFirst(), collinearPoints.getLast());
+                              this.totalSegments++;
+                          }
+                          headers.push(collinearPoints.getFirst());
+                     }
+                    previousSlope = currentSlope;
+                    collinearPoints.clear();
+               }
+                collinearPoints.add(q);
             }
         }
 
-        return null;
+        return this.segments;
 
     }
+
+
 
 
 }

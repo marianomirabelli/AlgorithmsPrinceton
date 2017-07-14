@@ -76,7 +76,7 @@ public class Point implements Comparable<Point> {
      *         argument point
      */
     public int compareTo(Point that) {
-        if(this.y< that.y ||  (this.y< that.y && this.x<that.x)){
+        if(this.y< that.y ||  (this.y == that.y && this.x<that.x)){
             return -1;
         }else if(this.y==that.y && this.x==that.x){
             return 0;
@@ -92,7 +92,7 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        return new SlopeOrderComparator(this);
+        return new SlopeOrderComparator();
     }
 
 
@@ -111,16 +111,10 @@ public class Point implements Comparable<Point> {
 
     private class SlopeOrderComparator implements Comparator<Point>{
 
-        private Point thisPoint;
-
-        public SlopeOrderComparator(Point thisPoint){
-            this.thisPoint =  thisPoint;
-        }
-
         @Override
         public int compare(Point pointOne, Point pointTwo) {
-            double xy1 = thisPoint.slopeTo(pointOne);
-            double xy2 = thisPoint.slopeTo(pointTwo);
+            double xy1 = slopeTo(pointOne);
+            double xy2 = slopeTo(pointTwo);
             if(xy1==xy2){
                 return 0;
             }else if(xy1<xy2){
