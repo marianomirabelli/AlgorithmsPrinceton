@@ -85,9 +85,7 @@ public class FastCollinearPoints {
             }
 
         }
-        if(arraySegments==null){
-            arraySegments = new LineSegment[this.segments.size()];
-        }
+        arraySegments = new LineSegment[this.segments.size()];
         return this.segments.toArray(arraySegments);
 
     }

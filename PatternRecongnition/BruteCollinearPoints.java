@@ -69,10 +69,8 @@ public class BruteCollinearPoints {
                }
            }
         }
-        if(arraySegments==null){
-            arraySegments = new LineSegment[this.segments.size()];
-        }
-       return this.segments.toArray(arraySegments);
+        arraySegments = new LineSegment[this.segments.size()];
+        return this.segments.toArray(arraySegments);
     }
 
 }
