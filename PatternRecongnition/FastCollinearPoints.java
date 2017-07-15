@@ -55,10 +55,11 @@ public class FastCollinearPoints {
             Arrays.sort(copyPoints,p.slopeOrder());
             collinearPoints = new LinkedList<Point>();
             double previousSlope = copyPoints[1].slopeTo(p);
+            double currentSlope = 0.0;
             collinearPoints.add(copyPoints[1]);
             for(int i = 2; i < copyPoints.length-1;i++){
                Point q = copyPoints[i];
-               double currentSlope = q.slopeTo(p);
+                currentSlope = q.slopeTo(p);
                 if(previousSlope  != currentSlope){
                     if(collinearPoints.size()>=3){
                           collinearPoints.add(p);
@@ -72,6 +73,10 @@ public class FastCollinearPoints {
                     collinearPoints.clear();
                }
                 collinearPoints.add(q);
+            }
+            if(previousSlope  == currentSlope){
+                Collections.sort(collinearPoints);
+                this.segments.add(new LineSegment(collinearPoints.getFirst(), collinearPoints.getLast()));
             }
         }
         arraySegments = new LineSegment[this.segments.size()];
