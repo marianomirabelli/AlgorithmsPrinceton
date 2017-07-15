@@ -1,9 +1,7 @@
 import edu.princeton.cs.algs4.StdArrayIO;
 import edu.princeton.cs.algs4.StdStats;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * Created by Mariano on 1/7/17.
@@ -11,7 +9,9 @@ import java.util.Collections;
 public class BruteCollinearPoints {
 
     private Point [] points;
-    private LineSegment[] segments;
+    private Stack<Point> headers;
+    private ArrayList<LineSegment> segments;
+    private LineSegment [] arraySegments;
     private int totalSegments;
 
     public BruteCollinearPoints(Point[] points){
@@ -25,7 +25,7 @@ public class BruteCollinearPoints {
             }
 
             for(int j = i+1; j< points.length; j++){
-                if(points[i].equals(points[j])){
+                if(points[i].compareTo(points[j]) == 0){
                     throw new IllegalArgumentException("Is not possible add duplicated points");
                 }
             }
@@ -33,12 +33,12 @@ public class BruteCollinearPoints {
         }
 
         this.points = points;
-        this.segments = new LineSegment[points.length/4];
-        this.totalSegments = 0;
+        this.headers = new Stack<Point>();
+        this.segments = new ArrayList<LineSegment>((this.points.length*this.points.length-1)/2);
     }
 
     public int numberOfSegments(){
-        return this.totalSegments;
+        return this.segments.size();
     }
 
     public LineSegment[] segments(){
@@ -51,21 +51,25 @@ public class BruteCollinearPoints {
                    if(slopePtoQ == slopeQtoR){
                        for(int h = k+1; h <= points.length-1;h++){
                            double slopeRtoS = points[k].slopeTo(points[h]);
-                           if((slopeRtoS == slopeQtoR) && (this.totalSegments < points.length/4)){
-                               Point [] collinearPoints  = new Point [4];
-                               collinearPoints[0] = points[i];
-                               collinearPoints[1] = points[j];
-                               collinearPoints[2] = points[k];
-                               collinearPoints[3] = points[h];
-                               this.segments[this.totalSegments] = new LineSegment(collinearPoints[0],collinearPoints[3]);
-                               this.totalSegments++;
+                           if(slopeRtoS == slopeQtoR){
+                               LinkedList<Point> collinearPoints  = new LinkedList();
+                               collinearPoints.add(points[i]);
+                               collinearPoints.add(points[j]);
+                               collinearPoints.add(points[k]);
+                               collinearPoints.add(points[h]);
+                               Collections.sort(collinearPoints);
+                               if(headers.isEmpty() || headers.pop().compareTo(collinearPoints.getFirst())!=0){
+                                   this.segments.add(new LineSegment(collinearPoints.getFirst(),collinearPoints.getLast()));
+                               }
+
                            }
                        }
                    }
                }
            }
         }
-        return segments;
+        arraySegments = new LineSegment[this.segments.size()];
+        return this.segments.toArray(arraySegments);
     }
 
 }

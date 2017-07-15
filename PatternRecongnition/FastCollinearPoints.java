@@ -1,3 +1,4 @@
+import javax.sound.sampled.Line;
 import java.util.*;
 
 /**
@@ -8,7 +9,8 @@ public class FastCollinearPoints {
 
     private Point [] points;
     private int totalSegments;
-    private LineSegment[] segments;
+    private ArrayList<LineSegment> segments;
+    private LineSegment [] arraySegments;
     private Stack<Point> headers;
 
 
@@ -33,12 +35,12 @@ public class FastCollinearPoints {
 
         this.totalSegments = 0;
         this.points = points;
-        this.segments = new LineSegment [this.points.length/4];
+        this.segments = new ArrayList<LineSegment>((this.points.length*this.points.length-1)/2);
         this.headers = new Stack<Point>();
     }
 
     public int numberOfSegments() {
-        return totalSegments;
+        return this.segments.size();
     }
 
     public LineSegment[] segments() {
@@ -57,8 +59,7 @@ public class FastCollinearPoints {
                           collinearPoints.add(p);
                           Collections.sort(collinearPoints);
                           if(headers.isEmpty() || headers.pop().compareTo(collinearPoints.getFirst())!=0) {
-                              this.segments[this.totalSegments] = new LineSegment(collinearPoints.getFirst(), collinearPoints.getLast());
-                              this.totalSegments++;
+                              this.segments.add(new LineSegment(collinearPoints.getFirst(), collinearPoints.getLast()));
                           }
                           headers.push(collinearPoints.getFirst());
                      }
@@ -68,8 +69,8 @@ public class FastCollinearPoints {
                 collinearPoints.add(q);
             }
         }
-
-        return this.segments;
+        arraySegments = new LineSegment[this.segments.size()];
+        return this.segments.toArray(arraySegments);
 
     }
 
