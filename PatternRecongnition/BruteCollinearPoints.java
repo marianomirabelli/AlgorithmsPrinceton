@@ -46,6 +46,7 @@ public class BruteCollinearPoints {
     }
 
     public LineSegment[] segments(){
+        LinkedList<Point> collinearPoints;
         Point[] copy = Arrays.copyOf(this.points,this.points.length);
         Arrays.sort(copy);
         for(int i=0;i <= copy.length-1;i++){
@@ -57,16 +58,12 @@ public class BruteCollinearPoints {
                        for(int h = k+1; h <= copy.length-1;h++){
                            double slopeRtoS = copy[k].slopeTo(copy[h]);
                            if(slopeRtoS == slopeQtoR){
-                               LinkedList<Point> collinearPoints  = new LinkedList<Point>();
+                               collinearPoints  = new LinkedList<Point>();
                                collinearPoints.add(copy[i]);
                                collinearPoints.add(copy[j]);
                                collinearPoints.add(copy[k]);
-                               collinearPoints.add(points[h]);
-                               Collections.sort(collinearPoints);
-                               if(headers.isEmpty() || headers.pop().compareTo(collinearPoints.getFirst())!=0){
-                                   this.segments.add(new LineSegment(collinearPoints.getFirst(),collinearPoints.getLast()));
-                               }
-
+                               collinearPoints.add(copy[h]);
+                               this.segments.add(new LineSegment(collinearPoints.getFirst(),collinearPoints.getLast()));
                            }
                        }
                    }
