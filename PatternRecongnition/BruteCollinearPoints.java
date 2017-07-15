@@ -52,7 +52,7 @@ public class BruteCollinearPoints {
                        for(int h = k+1; h <= points.length-1;h++){
                            double slopeRtoS = points[k].slopeTo(points[h]);
                            if(slopeRtoS == slopeQtoR){
-                               LinkedList<Point> collinearPoints  = new LinkedList();
+                               LinkedList<Point> collinearPoints  = new LinkedList<Point>();
                                collinearPoints.add(points[i]);
                                collinearPoints.add(points[j]);
                                collinearPoints.add(points[k]);
