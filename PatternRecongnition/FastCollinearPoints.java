@@ -19,13 +19,21 @@ public class FastCollinearPoints {
             throw new IllegalArgumentException("The input array can't be null");
         }
 
-        for(int j = 0; j< points.length-1; j++){
-           if(points[j] == null || points[j+1] == null){
-               throw new IllegalArgumentException("Is not possible add null values");
-           }
-          if(points[j].compareTo(points[j+1]) == 0 ){
-            throw new IllegalArgumentException("Is not possible add duplicated points");
-          }
+        for(int  i = 0; i < points.length; i++){
+            if(points[i] == null){
+                throw new IllegalArgumentException("Is not possible add null values");
+            }
+
+            for(int j = i+1; j< points.length; j++){
+                if(points[j] == null){
+                    throw new IllegalArgumentException("Is not possible add null values");
+                }
+
+                if(points[i].compareTo(points[j]) == 0){
+                    throw new IllegalArgumentException("Is not possible add duplicated points");
+                }
+            }
+
         }
 
 
