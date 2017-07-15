@@ -57,7 +57,7 @@ public class FastCollinearPoints {
             double previousSlope = copyPoints[1].slopeTo(p);
             double currentSlope = 0.0;
             collinearPoints.add(copyPoints[1]);
-            for(int i = 2; i < copyPoints.length-1;i++){
+            for(int i = 2; i < copyPoints.length;i++){
                Point q = copyPoints[i];
                 currentSlope = q.slopeTo(p);
                 if(previousSlope  != currentSlope){
@@ -74,12 +74,20 @@ public class FastCollinearPoints {
                }
                 collinearPoints.add(q);
             }
-            if(previousSlope  == currentSlope){
-                Collections.sort(collinearPoints);
-                this.segments.add(new LineSegment(collinearPoints.getFirst(), collinearPoints.getLast()));
+            if(!collinearPoints.isEmpty()){
+                if(collinearPoints.size()>=3){
+                    collinearPoints.add(p);
+                    Collections.sort(collinearPoints);
+                    if(headers.isEmpty() || headers.pop().compareTo(collinearPoints.getFirst())!=0) {
+                        this.segments.add(new LineSegment(collinearPoints.getFirst(), collinearPoints.getLast()));
+                    }
+                }
             }
+
         }
-        arraySegments = new LineSegment[this.segments.size()];
+        if(arraySegments==null){
+            arraySegments = new LineSegment[this.segments.size()];
+        }
         return this.segments.toArray(arraySegments);
 
     }
