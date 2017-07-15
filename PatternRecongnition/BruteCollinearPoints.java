@@ -19,17 +19,13 @@ public class BruteCollinearPoints {
             throw new IllegalArgumentException("The input array can't be null");
         }
 
-        for(int  i = 0; i < points.length; i++){
-            if(points[i] == null){
+        for(int j = 0; j< points.length-1; j++){
+            if(points[j] == null || points[j+1] == null){
                 throw new IllegalArgumentException("Is not possible add null values");
             }
-
-            for(int j = i+1; j< points.length; j++){
-                if(points[i].compareTo(points[j]) == 0){
-                    throw new IllegalArgumentException("Is not possible add duplicated points");
-                }
+            if(points[j].compareTo(points[j+1]) == 0 ){
+                throw new IllegalArgumentException("Is not possible add duplicated points");
             }
-
         }
 
         this.points = points;
@@ -42,21 +38,22 @@ public class BruteCollinearPoints {
     }
 
     public LineSegment[] segments(){
-        Arrays.sort(this.points);
-        for(int i=0;i <= points.length-1;i++){
-           for(int j=i+1; j <= points.length-1;j++){
-               double slopePtoQ = points[i].slopeTo(points[j]);
-               for(int k=j+1; k <= points.length-1;k++){
-                   double slopeQtoR = points[j].slopeTo(points[k]);
+        Point[] copy = Arrays.copyOf(this.points,this.points.length);
+        Arrays.sort(copy);
+        for(int i=0;i <= copy.length-1;i++){
+           for(int j=i+1; j <= copy.length-1;j++){
+               double slopePtoQ = copy[i].slopeTo(copy[j]);
+               for(int k=j+1; k <= copy.length-1;k++){
+                   double slopeQtoR = copy[j].slopeTo(copy[k]);
                    if(slopePtoQ == slopeQtoR){
-                       for(int h = k+1; h <= points.length-1;h++){
-                           double slopeRtoS = points[k].slopeTo(points[h]);
+                       for(int h = k+1; h <= copy.length-1;h++){
+                           double slopeRtoS = copy[k].slopeTo(copy[h]);
                            if(slopeRtoS == slopeQtoR){
                                LinkedList<Point> collinearPoints  = new LinkedList<Point>();
-                               collinearPoints.add(points[i]);
-                               collinearPoints.add(points[j]);
-                               collinearPoints.add(points[k]);
-                               collinearPoints.add(points[h]);
+                               collinearPoints.add(copy[i]);
+                               collinearPoints.add(copy[j]);
+                               collinearPoints.add(copy[k]);
+                               collinearPoints.add(copy[h]);
                                Collections.sort(collinearPoints);
                                if(headers.isEmpty() || headers.pop().compareTo(collinearPoints.getFirst())!=0){
                                    this.segments.add(new LineSegment(collinearPoints.getFirst(),collinearPoints.getLast()));
